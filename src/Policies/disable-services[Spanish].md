@@ -126,6 +126,8 @@ sea realmente util para que tenga todo el derecho de elegir que se queda y que s
 
 ## Samba (SMB/CIFS):
 
+
+
 ## Fuentes / Infografia:
 
 ### Avahi-daemon:
@@ -147,4 +149,9 @@ sea realmente util para que tenga todo el derecho de elegir que se queda y que s
 - https://manpages.debian.org/unstable/nfs-kernel-server/rpc.nfsd.8.en.html
 - https://packages.debian.org/bookworm/nfs-kernel-server
 - `CVE-2026-53026`: https://security-tracker.debian.org/tracker/CVE-2026-53026
+
+### Samba: 
+-
+-
+-
 
