@@ -15,6 +15,10 @@
 #define ERR_SOCKET_BIND 0x01
 #define ERR_SOCKET 0x02
 
+#define ERR_PORT_WITH_CHARS 0x03
+
+const bool CLOSE_PORTS(char *PORT_USER);
+
 
 
 #endif
