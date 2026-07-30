@@ -72,3 +72,43 @@ const uint16_t Casting_Chars_Numbers(char *Char_Cast, uint8_t Size_Char) {
 
     return (Num_Cast);
 }
+
+const bool str_cmp(char *str1, char *str2) {
+    
+    size_t i = 0;
+
+    while(str1[i] != '\0' && str2[i] != '\0') {
+        if (str1[i] != str2[i]) {
+            return (false);
+        }
+
+        i++;
+    }
+
+    return (str1[i] != '\0' && str2[i] != '\0');
+}
+
+void str_cpy(char *Str_Origin, char *Str_Copy) {
+    size_t i = 0;
+
+    while(Str_Origin != '\0') {
+        (*Str_Copy)[i] = Str_Origin[i];
+        i++;
+    }
+}
+
+void str_cat(char *Str_Origin, char *Str_Cat) {
+
+    size_t i = 0;
+
+    while(Str_Origin[i] != '\0') {i++;}
+
+    size_t j = 0;
+
+    while(Str_Cat[j] != '\0') {
+        Str_Origin[i] = Str_Cat[j];
+        i++;
+        j++;
+    }
+}
+
