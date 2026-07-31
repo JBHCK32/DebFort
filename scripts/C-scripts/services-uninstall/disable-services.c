@@ -6,36 +6,40 @@
 #define FINALE_COMMAND 26
 #define MAX_RANGE_FINALE_COMMAND (FINALE_COMMAND + 1)
 
-#define MAX_RANGE_COMMAND (COMMAND + INIT_COMMAND + MAX_RANGE_SERVICE_NAME + FINALE_COMMAND + MAX_RANGE_SERVICE_NAME + 1)
+#define MAX_RANGE_COMMAND (INIT_COMMAND + MAX_RANGE_NAME_SERVICES + FINALE_COMMAND + MAX_RANGE_NAME_SERVICES + 1)
 
+#define CHAR_INIT_COMMAND "sudo systemctl stop "
 
+#define CHAR_FINALE_COMMAND " && sudo systemctl disable "
 // -------------------------------------------------------------------------------------------
 // Para poder usar esta función el tamaño de el string service no puede superar el tamaño
-// de 219 caracteres visibles. La idea es que esta función haga y procese la logica de la
+// de 219 caracteres visibles. 
+//
+// La idea es que esta función haga y procese la logica de la
 // creación del comando y lo que de vuelve system al ejecutarlo, sin mentirte
 // no creo que ocurran muchos errores ya que al final antes de procesar el servicio
 // ser verifica previamente que el servicio exista, sino simplemente no se procesara
 // nada y se le notificara al usuario que el servicio que escribio o no existe
 // o simplemente no esta activo en su maquina.
+//
+// Pero aclarando todo, este comando simplemente no puede fallar por la verificación
+// anterior a su ejecución de que el servicio si esta en escucha.
 // -------------------------------------------------------------------------------------------
-static const uint8_t Disable_Service(char *Service) {
-
-    char Init_Command[MAX_RANGE_INIT_COMMAND] = "sudo systemctl stop ";
-    char Finale_Command[MAX_RANGE_FINALE_COMMAND] = " && sudo systemctl disable ";
+static uint8_t Disable_Service(char *Service) {
 
     char Command[MAX_RANGE_COMMAND];
 
-    str_cat(Command, Init_Command);
+    str_cat(Command, CHAR_INIT_COMMAND);
     str_cat(Command, Service);
-    str_cat(Command, Finale_Command);
+    str_cat(Command, CHAR_FINALE_COMMAND);
     str_cat(Command, Service);
 
-    const int32_t Code_Result_DisableService = system(Command);
+    int32_t Code_Result_DisableService = system(Command);
 
     if (Code_Result_DisableService != SUCCESS) {
-        return (ERR_SERVICE);
+        return (ERR_POPEN);
     }
-
+    
     return (SUCCESS);
 }
 
@@ -57,9 +61,9 @@ static const uint8_t Disable_Service(char *Service) {
 // que es grave y que deberia leer el mensaje de error para saber que hacer en esa
 // situación.
 // -------------------------------------------------------------------------------------------
-const bool DISABLE_SERVICE(char *Service) {
+bool DISABLE_SERVICE(char *Service) {
 
-    char List_Services[MAX_RANGE_SERVICES][MAX_RANGE_SERVICE_NAME];
+    char List_Services[MAX_RANGE_SERVICES][MAX_RANGE_NAME_SERVICES];
     uint16_t Number_Services = 0;
 
     const uint8_t Code_Result_GetServices = GET_SERVICES(List_Services, &Number_Services);
@@ -73,7 +77,7 @@ const bool DISABLE_SERVICE(char *Service) {
     bool Equal_Name_Services = false;
 
     for (uint8_t i = 0; i < Number_Services; i++) {
-        if (str_cpm(List_Services[i], Service)) {
+        if (str_cmp(List_Services[i], Service)) {
             Equal_Name_Services = true;
             break;
         }
@@ -87,7 +91,7 @@ const bool DISABLE_SERVICE(char *Service) {
     const uint8_t Code_Result_DisableService = Disable_Service(Service);
 
     if (Code_Result_DisableService == ERR_POPEN) {
-        Verification_ERR_SERVICE(ERR_POPEN);
+        Verification_ERR_SERVICES(ERR_POPEN);
         return (false);
     }
 

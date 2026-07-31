@@ -4,7 +4,10 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include <unistd.h>
+
 #include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
 
 #define SUCCESS 0x00
 
@@ -20,7 +23,10 @@
 // número del puerto.
 // ---------------------------------------------------------------------
 
-const bool CLOSE_DIRECT_PORT(uint16_t PORT_USER);
+uint8_t CLOSE_DIRECT_PORT(const uint16_t PORT_USER);
+
+bool CLOSE_PORT_TO_MENU(const uint16_t PORT_USER);
+
 
 // ------------------------------------------------------------------
 // automatic-list-ports.c : 
@@ -33,6 +39,13 @@ const bool CLOSE_DIRECT_PORT(uint16_t PORT_USER);
 // de los servicios de cierren de manera automatica los puertos
 // estandar por los cuales se comunicaban estos servicios.
 // ------------------------------------------------------------------
-const bool INIT_AUTOMATIC_CLOSE_PORTS();
+bool INIT_AUTOMATIC_CLOSE_PORTS();
+
+// ----------------------------------------------------------------------------------
+// Esta es una función que se repite mucho en cada libreria y es para mostrar
+// los errores especificos he internos de lo que sucede en los procesos
+// internos de la libreria.
+// ----------------------------------------------------------------------------------
+void Verification_ERR_PORT(const uint8_t CODE_ERR, const uint16_t PORT, void* ADD_MESSAGE);
 
 #endif

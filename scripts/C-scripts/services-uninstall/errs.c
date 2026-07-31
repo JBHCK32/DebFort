@@ -34,15 +34,15 @@ void Verification_ERR_SERVICES(const uint8_t CODE_ERR) {
     switch(CODE_ERR) {
         case ERR_SERVICE_NOT_EQ:
             MESSAGE_ERR_SERVICE_NOT_EQ();
-            return (void);
+            return;
 
         case ERR_POPEN:
             MESSAGE_ERR_POPEN();
-            return (void);
+            return;
 
         default:
             printf("Unknown Error: %u", (const unsigned int)CODE_ERR);
-            return (void);
+            return;
     }
 }
 

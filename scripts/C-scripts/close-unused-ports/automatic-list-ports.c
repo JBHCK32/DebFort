@@ -52,7 +52,7 @@ static const uint16_t LIST_CLOSE_PORTS[MAX_RANGE_LIST_PORTS] = {
 //
 // Esto es solo algo estetico y por eso lo hice tan rigido.
 // --------------------------------------------------------------------------------------------------
-static const char LIST_SERVICES[MAX_RANGE_LIST_SERVICES][MAX_RANGE_NAME_SERVICES] = {
+static const char LIST_NAME_SERVICES[MAX_RANGE_LIST_SERVICES][MAX_RANGE_NAME_SERVICES] = {
     "avahi-daemon.service",
     "cups.service",
     "rpcbind.service",
@@ -90,12 +90,12 @@ static bool Automatic_Close_Ports() {
         const uint8_t Code_Result_Close = CLOSE_DIRECT_PORT(Port);
         
         if (Code_Result_Close == ERR_SOCKET) {
-            Verification_ERR_PORT(Code_Result_Close, Port);
+            Verification_ERR_PORT(Code_Result_Close, Port, NULL);
             return (false);
         }
 
         else if (Code_Result_Close != SUCCESS) {
-            Verification_ERR_PORT(ERR_DIRECT_PORT, Port, LIST_SERVICES[i]);
+            Verification_ERR_PORT(ERR_DIRECT_PORT, Port, (void*)LIST_NAME_SERVICES[i]);
             continue;
         }
         
@@ -109,7 +109,7 @@ static bool Automatic_Close_Ports() {
 // Esta es la función publica con la que interactuara el menu
 // para ejecutar el proceso de cerrar puertos de manera automatica.
 // -------------------------------------------------------------------
-const bool INIT_AUTOMATIC_CLOSE_PORTS() {
+bool INIT_AUTOMATIC_CLOSE_PORTS() {
     return (Automatic_Close_Ports());
 }
 

@@ -16,7 +16,7 @@ size_t str_len(char *str) {
 // porque esto verifica unicamente que la 
 // cadena contenga numeros y no caracteres.
 // ----------------------------------------------
-const bool str_num(char *str) {
+bool str_num(char *str) {
 
     uint16_t i = 0;
 
@@ -58,7 +58,7 @@ static size_t math_pow(uint8_t base, uint8_t exponent) {
 // en la transforamción de un numero
 // de puerto char a un número entero.
 // -----------------------------------------------
-const uint16_t Casting_Chars_Numbers(char *Char_Cast, uint8_t Size_Char) {
+uint16_t Casting_Chars_Numbers(char *Char_Cast, uint8_t Size_Char) {
      
     uint8_t i = 0;
     uint16_t Num_Cast = 0;
@@ -73,7 +73,7 @@ const uint16_t Casting_Chars_Numbers(char *Char_Cast, uint8_t Size_Char) {
     return (Num_Cast);
 }
 
-const bool str_cmp(char *str1, char *str2) {
+bool str_cmp(char *str1, char *str2) {
     
     size_t i = 0;
 
@@ -91,8 +91,8 @@ const bool str_cmp(char *str1, char *str2) {
 void str_cpy(char *Str_Origin, char *Str_Copy) {
     size_t i = 0;
 
-    while(Str_Origin != '\0') {
-        (*Str_Copy)[i] = Str_Origin[i];
+    while(Str_Origin[i] != '\0') {
+        Str_Copy[i] = Str_Origin[i];
         i++;
     }
 }

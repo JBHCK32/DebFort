@@ -4,15 +4,22 @@
 
 #include <stdbool.h>
 #include <stdint.h>
-
+#include <stddef.h>
 
 // ++++++++++++
 // utils.c:
 // ++++++++++++
 size_t str_len(char *str);
 
-const bool str_num(char *str);
+bool str_num(char *str);
 
-const uint16_t Casting_Chars_Numbers(char *Char_Cast, uint8_t Size_Char);
+uint16_t Casting_Chars_Numbers(char *Char_Cast, uint8_t Size_Char);
+
+bool str_cmp(char *str1, char *str2);
+
+void str_cpy(char *Str_Origin, char *Str_Copy);
+
+void str_cat(char *Str_Origin, char *Str_Cat);
+
 #endif
 

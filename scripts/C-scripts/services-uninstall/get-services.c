@@ -25,7 +25,7 @@
 // porque trata de ser especifica como la acción de respirar, no trata de ser un cuerpo
 // completo que gestione todos los casos de riesgo.
 // ------------------------------------------------------------------------------------------
-static const bool s_scanf(char *Str_Copy, char *Str_Paste) {
+static bool s_scanf(char *Str_Copy, char *Str_Paste) {
     size_t i = 0;
 
     while(Str_Copy[i] != '\0' && Str_Copy[i] != ' ') {
@@ -44,9 +44,8 @@ static const bool s_scanf(char *Str_Copy, char *Str_Paste) {
 // usuario para obtener el nombre de los servicios que tiene activos el usuario en el momento
 // de ejecución.
 // -------------------------------------------------------------------------------------------------
-static const uint8_t Get_Services(FILE **Container, char *List_Services, uint16_t *Number_Services) {
+static uint8_t Get_Services(FILE **Container, char List_Services[][MAX_RANGE_NAME_SERVICES], uint16_t *Number_Services) {
 
-        
     char line[MAX_RANGE_LINE];
 
     // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -59,7 +58,7 @@ static const uint8_t Get_Services(FILE **Container, char *List_Services, uint16_
     // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     *(Container) = popen("systemctl list-units --type=service --state=running --no-legend --no-pager", "r");
     
-    if (*(List_Services) == NULL) {
+    if (*(Container) == NULL) {
         return (ERR_POPEN);
     }
 
@@ -68,7 +67,7 @@ static const uint8_t Get_Services(FILE **Container, char *List_Services, uint16_
     // de MAX_RANGE_LINE para ir leyendo con ese buffer en la variable
     // line.
     // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    while (fgets(line, sizeof(line), *(Container)) != NULL && Number_Services < MAX_RANGE_SERVICES) {
+    while (fgets(line, sizeof(line), *(Container)) != NULL && *Number_Services < MAX_RANGE_SERVICES) {
         
         // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         // Extraemos la primera palabra que es el nombre del servicio
@@ -82,12 +81,12 @@ static const uint8_t Get_Services(FILE **Container, char *List_Services, uint16_
         // del nombre del servicio del usuario.
         // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         if (s_scanf(line, service_name)) {
-            str_cpy(List_Services[Number_Services], service_name);
+            str_cpy(List_Services[*Number_Services], service_name);
             Number_Services++;
         }
     }
 
-    pclose(*(List_Services));
+    pclose(*(Container));
 
     return (SUCCESS);
 } 
@@ -98,15 +97,15 @@ static const uint8_t Get_Services(FILE **Container, char *List_Services, uint16_
 // mostrar el contenido de manera bonita de una variable que contiene
 // la lista de servicios.
 // --------------------------------------------------------------------------------
-const bool SHOW_SERVICES() {
+bool SHOW_SERVICES() {
     
     FILE *Output;
 
     uint16_t Number_Services = 0;
 
-    char services[MAX_RANGE_SERVICES][MAX_RANGE_NAME_SERIVCES];
+    char services[MAX_RANGE_SERVICES][MAX_RANGE_NAME_SERVICES];
 
-    const uint8_t Code_Result_GetServices = Get_Services(&Container, services, &Number_Services);
+    const uint8_t Code_Result_GetServices = Get_Services(&Output, services, &Number_Services);
 
     if (Code_Result_GetServices != SUCCESS) {
         Verification_ERR_SERVICES(Code_Result_GetServices);
@@ -127,11 +126,11 @@ const bool SHOW_SERVICES() {
 // justo cuando se recibe el input del usuario y tener los datos más recientes
 // a la hora de verificar.
 // ---------------------------------------------------------------------------------
-const uint8_t GET_SERVICES(char *List_Services[][MAX_RANGE_NAME_SERVICES], uint16_t *Number_Services) {
+uint8_t GET_SERVICES(char List_Services[][MAX_RANGE_NAME_SERVICES], uint16_t *Number_Services) {
     
     FILE *flow_data;
 
-    const uint8_t Code_Resutl_GetServices = Get_Services(&flow_data, List_Services, Number_Services);
+    const uint8_t Code_Result_GetServices = Get_Services(&flow_data, List_Services, Number_Services);
 
     if (Code_Result_GetServices != SUCCESS) {
         return (Code_Result_GetServices);

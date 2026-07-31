@@ -12,7 +12,7 @@
 // ya que al final solo vamos a cerrar el puerto, no a comunicarnos
 // a travez de él.
 // -------------------------------------------------------------------
-static const uint8_t Close_Port(const uint16_t PORT_USER) {
+static uint8_t Close_Port(const uint16_t PORT_USER) {
 
     int server_fd;
     struct sockaddr_in address;
@@ -71,7 +71,7 @@ static const uint8_t Close_Port(const uint16_t PORT_USER) {
 // Esta es una función especifica para poder cerrar puertos de 
 // manera directa sin tener que hacer un casteo de por medio.
 // ---------------------------------------------------------------
-const uint8_t CLOSE_DIRECT_PORT(const uint16_t PORT_USER) {
+uint8_t CLOSE_DIRECT_PORT(const uint16_t PORT_USER) {
 
     const uint8_t Code_Result_Close = Close_Port(PORT_USER);
 
@@ -90,17 +90,17 @@ const uint8_t CLOSE_DIRECT_PORT(const uint16_t PORT_USER) {
 // que error ocurrio pero se retorna que la operación fue exitosa ya que el unico error que puede
 // ocurrir es que el puerto este ocupado o cerrado y se le comunica al usuario.
 // ----------------------------------------------------------------------------------------------------
-const bool CLOSE_PORT_TO_MENU(const uint16_t PORT_USER) {
+bool CLOSE_PORT_TO_MENU(const uint16_t PORT_USER) {
 
     const uint8_t Code_Result_Close = Close_Port(PORT_USER);
 
     if (Code_Result_Close == ERR_SOCKET) {
-        Verification_ERR_PORT(Code_Result_Close, PORT_USER);
+        Verification_ERR_PORT(Code_Result_Close, PORT_USER, NULL);
         return (false);
     }
 
     else if (Code_Result_Close != SUCCESS) {
-        Verification_ERR_PORT(Code_Result_Close, PORT_USER);
+        Verification_ERR_PORT(Code_Result_Close, PORT_USER, NULL);
     }
 
     return (true);
