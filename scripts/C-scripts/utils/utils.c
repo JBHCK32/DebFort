@@ -85,16 +85,18 @@ bool str_cmp(char *str1, char *str2) {
         i++;
     }
 
-    return (str1[i] != '\0' && str2[i] != '\0');
+    return (str1[i] == '\0' && str2[i] == '\0');
 }
 
 void str_cpy(char *Str_Origin, char *Str_Copy) {
     size_t i = 0;
 
-    while(Str_Origin[i] != '\0') {
-        Str_Copy[i] = Str_Origin[i];
+    while(Str_Copy[i] != '\0') {
+        Str_Origin[i] = Str_Copy[i];
         i++;
     }
+
+    Str_Origin[i] = '\0';
 }
 
 void str_cat(char *Str_Origin, char *Str_Cat) {
@@ -110,5 +112,9 @@ void str_cat(char *Str_Origin, char *Str_Cat) {
         i++;
         j++;
     }
+
+    Str_Origin[i] = '\0';
 }
+
+
 

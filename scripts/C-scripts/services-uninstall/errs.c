@@ -3,12 +3,13 @@
 
 
 static void MESSAGE_ERR_SERVICE_NOT_EQ() {
-    printf("\n\n----------------------------------------------------------------------------------------------------------------");
-    printf("\n>> Español: ");
-    fprintf(stderr, "\n\x1b[1;31m>>[ERROR]: El servicio que escribiste no existe o ya esta desactivado o enmascarado...\x1b[0m\n");
-    printf("\n>> English: "); 
-    fprintf(stderr, "\n\x1b[1;31m>>[ERROR]: The service you typed doesn't exist or is already disabled or masked...\x1b[0m\n");
-    printf("----------------------------------------------------------------------------------------------------------------\n\n");
+    printf("\n\n\x1b[31m------------------------------------------------------------------------------------------------------------\x1b[0m");
+    printf("\n\x1b[1;36m>> Español: \x1b[0m\n");
+    fprintf(stderr, "\x1b[1;31m>>[ERROR]: El servicio que escribiste no existe o ya esta desactivado o enmascarado...\x1b[0m");
+    
+    printf("\n\x1b[1;36m>> English: \x1b[0m\n"); 
+    fprintf(stderr, "\x1b[1;31m>>[ERROR]: The service you typed doesn't exist or is already disabled or masked...\x1b[0m\n");
+    printf("\x1b[31m------------------------------------------------------------------------------------------------------------\x1b[0m\n\n");
 }
 
 static void MESSAGE_ERR_POPEN() {

@@ -20,7 +20,7 @@
 
 bool SHOW_SERVICES();
 
-uint8_t GET_SERVICES(char List_Services[][MAX_RANGE_NAME_SERVICES], uint16_t *Number_Services);
+uint8_t GET_SERVICES(char (*List_Services)[MAX_RANGE_NAME_SERVICES], uint16_t *Number_Services);
 
 bool DISABLE_SERVICE(char *Service);
 

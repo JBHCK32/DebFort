@@ -27,14 +27,26 @@
 // ------------------------------------------------------------------------------------------
 static bool s_scanf(char *Str_Copy, char *Str_Paste) {
     size_t i = 0;
+    size_t j = 0;
 
-    while(Str_Copy[i] != '\0' && Str_Copy[i] != ' ') {
-        Str_Paste[i] = Str_Copy[i];
+    while (Str_Copy[i] == ' ' || Str_Copy[i] == '\t') {
         i++;
     }
 
-    Str_Paste[i] = '\0';
+     // Si no hay caracteres, retornar false
+    if (Str_Copy[i] == '\0' || Str_Copy[i] == '\n') {
+        return false;
+    }
 
+    // Copiar hasta un espacio o tabulador o fin de línea
+    while (Str_Copy[i] != '\0' && Str_Copy[i] != ' ' && Str_Copy[i] != '\t' && Str_Copy[i] != '\n') {
+        Str_Paste[j] = Str_Copy[i];
+        i++;
+        j++;
+    }
+    
+    Str_Paste[j] = '\0';
+    
     return (true);
 }
 
@@ -44,7 +56,7 @@ static bool s_scanf(char *Str_Copy, char *Str_Paste) {
 // usuario para obtener el nombre de los servicios que tiene activos el usuario en el momento
 // de ejecución.
 // -------------------------------------------------------------------------------------------------
-static uint8_t Get_Services(FILE **Container, char List_Services[][MAX_RANGE_NAME_SERVICES], uint16_t *Number_Services) {
+static uint8_t Get_Services(FILE **Container, char (*List_Services)[MAX_RANGE_NAME_SERVICES], uint16_t *Number_Services) {
 
     char line[MAX_RANGE_LINE];
 
@@ -56,7 +68,7 @@ static uint8_t Get_Services(FILE **Container, char List_Services[][MAX_RANGE_NAM
     // y mostrarselos al usuario los servicios correspondientes
     // que corren en su maquina.
     // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    *(Container) = popen("systemctl list-units --type=service --state=running --no-legend --no-pager", "r");
+    *(Container) = popen("sudo systemctl list-units --type=service --state=running --no-legend --no-pager", "r");
     
     if (*(Container) == NULL) {
         return (ERR_POPEN);
@@ -80,9 +92,9 @@ static uint8_t Get_Services(FILE **Container, char List_Services[][MAX_RANGE_NAM
         // La idea es parsear la salida del comando con esa función que facilita la obtención
         // del nombre del servicio del usuario.
         // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-        if (s_scanf(line, service_name)) {
+        if (s_scanf(line, service_name)) { 
             str_cpy(List_Services[*Number_Services], service_name);
-            Number_Services++;
+            (*Number_Services)++;
         }
     }
 
@@ -92,7 +104,7 @@ static uint8_t Get_Services(FILE **Container, char List_Services[][MAX_RANGE_NAM
 } 
 
 // --------------------------------------------------------------------------------
-// Esta función muestra la lista de servicios de forma bonita al usuario, 
+// Esta función muestra la lista de s|ervicios de forma bonita al usuario, 
 // es algo basico y que no se necesita mucho esfuerzo ya que solo hace una cosa, 
 // mostrar el contenido de manera bonita de una variable que contiene
 // la lista de servicios.
@@ -105,6 +117,7 @@ bool SHOW_SERVICES() {
 
     char services[MAX_RANGE_SERVICES][MAX_RANGE_NAME_SERVICES];
 
+
     const uint8_t Code_Result_GetServices = Get_Services(&Output, services, &Number_Services);
 
     if (Code_Result_GetServices != SUCCESS) {
@@ -112,10 +125,12 @@ bool SHOW_SERVICES() {
         return (false);
     }
 
-    printf("\n\x1b[1;32mServicios activos encontrados: %d\x1b[0m\n", Number_Services);
+    printf("\n\n\x1b[1;32mServicios activos encontrados: %d\x1b[0m\n\n", Number_Services);
+    printf("\n\x1b[1;32m----------------------------------------------------------------\x1b[0m\n");
     for (int i = 0; i < Number_Services; i++) {
         printf("\x1b[1;36m->%d. %s\x1b[0m\n", i + 1, services[i]);
     }
+    printf("\n\x1b[1;32m----------------------------------------------------------------\x1b[0m\n");
 
     return (true);
 }
@@ -126,7 +141,7 @@ bool SHOW_SERVICES() {
 // justo cuando se recibe el input del usuario y tener los datos más recientes
 // a la hora de verificar.
 // ---------------------------------------------------------------------------------
-uint8_t GET_SERVICES(char List_Services[][MAX_RANGE_NAME_SERVICES], uint16_t *Number_Services) {
+uint8_t GET_SERVICES(char (*List_Services)[MAX_RANGE_NAME_SERVICES], uint16_t *Number_Services) {
     
     FILE *flow_data;
 

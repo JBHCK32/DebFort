@@ -1,16 +1,14 @@
 #include "services-uninstall.h"
 
-#define INIT_COMMAND 20
+#define INIT_COMMAND 21
 #define MAX_RANGE_INIT_COMMAND (INIT_COMMAND + 1)
 
-#define FINALE_COMMAND 26
+#define FINALE_COMMAND 27
 #define MAX_RANGE_FINALE_COMMAND (FINALE_COMMAND + 1)
 
 #define MAX_RANGE_COMMAND (INIT_COMMAND + MAX_RANGE_NAME_SERVICES + FINALE_COMMAND + MAX_RANGE_NAME_SERVICES + 1)
 
-#define CHAR_INIT_COMMAND "sudo systemctl stop "
-
-#define CHAR_FINALE_COMMAND " && sudo systemctl disable "
+#define CHAR_FINALE_COMMAND 
 // -------------------------------------------------------------------------------------------
 // Para poder usar esta función el tamaño de el string service no puede superar el tamaño
 // de 219 caracteres visibles. 
@@ -28,10 +26,12 @@
 static uint8_t Disable_Service(char *Service) {
 
     char Command[MAX_RANGE_COMMAND];
+    char Init_Command[MAX_RANGE_INIT_COMMAND] = "sudo systemctl stop ";
+    char Finale_Command[MAX_RANGE_FINALE_COMMAND] = " && sudo systemctl disable ";
 
-    str_cat(Command, CHAR_INIT_COMMAND);
+    str_cat(Command, Init_Command);
     str_cat(Command, Service);
-    str_cat(Command, CHAR_FINALE_COMMAND);
+    str_cat(Command, Finale_Command);
     str_cat(Command, Service);
 
     int32_t Code_Result_DisableService = system(Command);
@@ -102,3 +102,4 @@ bool DISABLE_SERVICE(char *Service) {
 
     return (true);
 }
+

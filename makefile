@@ -1,4 +1,4 @@
-# Compilador y flags
+# Compilador y flags de seguridad
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror -O2 -fstack-protector-strong \
          -D_FORTIFY_SOURCE=3 -D_FILE_OFFSET_BITS=64 -D_GNU_SOURCE \
@@ -14,10 +14,10 @@ TARGET = $(BUILD_DIR)/debfort
 # Recopilar todos los archivos fuente (.c) recursivamente
 SOURCES = $(shell find $(SRC_DIR) -type f -name '*.c')
 
-# Generar lista de objetos: mantener estructura dentro de build/
+# Generar lista de objetos manteniendo la estructura de directorios dentro de build/
 OBJECTS = $(patsubst $(SRC_DIR)/%.c, $(BUILD_DIR)/%.o, $(SOURCES))
 
-# Directorios de inclusión para cabeceras
+# Directorios de inclusión para cabeceras (añadimos main-UX explícitamente)
 INCLUDES = -I$(SRC_DIR) \
            -I$(SRC_DIR)/utils \
            -I$(SRC_DIR)/close-unused-ports \
